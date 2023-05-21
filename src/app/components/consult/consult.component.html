@@ -1,0 +1,425 @@
+<div *ngIf="showPopUp" [ngClass]="classPopUp" role="alert">
+  <h4>{{ textPopup }}</h4>
+</div>
+
+<div class="login-container" *ngIf="checkError">
+  <div class="login-box">
+    <h2 id="text-login" class="text-center">Login API</h2>
+    <div class="input-group mb-3">
+      <input
+        style="width: 20em"
+        class="form-control"
+        type="text"
+        [(ngModel)]="apiKey"
+        placeholder="Insira sua X-RapidAPI-Key"
+      />
+      <button
+        #submitButton
+        class="btn btn-success"
+        type="button"
+        (click)="login()"
+      >
+        Entrar
+      </button>
+    </div>
+    <p id="help-login" class="text-center">
+      Ajuda acesse:
+      <a href="https://www.api-football.com/documentation-v3" target="_blank"
+        >API-Football</a
+      >
+    </p>
+  </div>
+</div>
+
+<div class="container-form">
+  <h1 class="text-center">Meu Time</h1>
+  <div class="container-country">
+    <div>
+      <label for="pais">Escolha o país:</label>
+      <select
+        class="form-select form-select-sm"
+        name="pais"
+        id="pais"
+        [(ngModel)]="selectedCountry"
+        (change)="onSelectedFlag()"
+        (change)="onCountryChange()"
+      >
+        <option value="" disabled selected>Selecione um país</option>
+        <option value="{{ country.name }}" *ngFor="let country of countries">
+          {{ country.name }}
+        </option>
+      </select>
+    </div>
+    <div class="container-flag">
+      <img
+        [ngClass]="{ 'animate__animated animate__fadeIn': selectedCountry }"
+        id="flag-image"
+        src="{{ selectedFlag }}"
+        alt="{{ selectedCountry }}"
+      />
+    </div>
+  </div>
+
+  <div class="container-season">
+    <div>
+      <label for="season-select">Escolha a temporada:</label>
+      <select
+        class="form-select form-select-sm"
+        name="season"
+        id="season-select"
+        [(ngModel)]="selectedSeason"
+        (change)="onSelectLeague()"
+        [disabled]="!selectedCountry"
+      >
+        <option value="" disabled selected>Selecione a temporada</option>
+        <ng-container *ngIf="selectedCountry">
+          <option value="{{ season }}" *ngFor="let season of seasons">
+            {{ season }}
+          </option>
+        </ng-container>
+      </select>
+    </div>
+    <div>
+      <p
+        [ngClass]="{ 'animate__animated animate__fadeIn': selectedSeason }"
+        id="season-text"
+      >
+        {{ selectedSeason }}
+      </p>
+    </div>
+  </div>
+
+  <div class="container-league">
+    <div>
+      <label for="league-select">Escolha a liga:</label>
+      <select
+        class="form-select form-select-sm"
+        name="league"
+        id="league-select"
+        [(ngModel)]="selectedLeagueId"
+        (change)="onSelectTeam()"
+        (change)="onSelectedFlagLeague()"
+        [disabled]="!selectedCountry"
+        [disabled]="!selectedSeason"
+      >
+        <option value="" disabled selected>Selecione a liga</option>
+        <ng-container>
+          <option value="{{ league.id }}" *ngFor="let league of leagues">
+            {{ league.name }}
+          </option>
+        </ng-container>
+      </select>
+    </div>
+    <div>
+      <img
+        [ngClass]="{ 'animate__animated animate__fadeIn': selectedLeagueId }"
+        id="league-img"
+        src="{{ selectedLeagueLogo }}"
+        alt=""
+      />
+    </div>
+  </div>
+
+  <div class="container-teams">
+    <div>
+      <label for="teams">Escolha o time:</label>
+      <select
+        class="form-select form-select-sm"
+        name="teams"
+        id="teams"
+        [(ngModel)]="selectedTeamId"
+        (change)="onSelectPlayers()"
+        (change)="onSelectStatistics()"
+        (change)="onSelectedFlagTeams()"
+        [disabled]="!selectedLeagueId"
+      >
+        <option value="" disabled selected>Selecione o time</option>
+        <ng-container>
+          <option value="{{ team.id }}" *ngFor="let team of teams">
+            {{ team.name }}
+          </option>
+        </ng-container>
+      </select>
+    </div>
+    <div>
+      <img
+        [ngClass]="{ 'animate__animated animate__fadeIn': selectedTeamId }"
+        id="team-img"
+        src="{{ selectedTeamLogo }}"
+        alt=""
+      />
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="selectedTeamId">
+  <div class="container container-players">
+    <ng-container *ngIf="players.length > 0; else noPlayers">
+      <div id="player-row" class="row row-cols-3 justify-content-center gap-4">
+        <div
+          *ngFor="let player of players"
+          class="col card"
+          [ngClass]="{ 'animate__animated animate__fadeIn': players }"
+          style="width: 18rem"
+        >
+          <img
+            id="player-photo"
+            src="{{ player.photo }}"
+            class="card-img-top"
+            alt="{{ player.name }}"
+          />
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ player.name }}</h5>
+            <div class="card-description">
+              <p class="text-description">Idade:</p>
+              <p class="result-description">
+                {{ player.age ? player.age : "--" }}
+              </p>
+            </div>
+            <div class="card-description">
+              <p class="text-description">Nacionalidade:</p>
+              <p class="result-description">
+                {{ player.nationality ? player.nationality : "--" }}
+              </p>
+            </div>
+            <div class="card-description">
+              <p class="text-description">Altura:</p>
+              <p class="result-description">
+                {{ player.height ? player.height : "--" }}
+              </p>
+            </div>
+            <div class="card-description">
+              <p class="text-description">Peso:</p>
+              <p class="result-description">
+                {{ player.weight ? player.weight : "--" }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #noPlayers>
+      <h3
+        style="
+          text-shadow: 0.1em 0.1em 0.05em #333;
+          font-size: 2em;
+          color: #fff;
+        "
+        id="text-no-player"
+        class="text-center"
+      >
+        Nenhum jogador disponível
+      </h3>
+    </ng-template>
+  </div>
+  <div class="container-formation-table row row-cols-2 justify-content-center">
+    <div *ngIf="lineups.length > 0" class="col container-lineup text-center">
+      <div class="card mx-auto" style="width: 18rem">
+        <img
+          src="../../../assets/time-tatic-image.jpg"
+          class="card-img-top"
+          alt="tatic logo"
+        />
+        <div
+          style="text-shadow: 0.1em 0.1em 0.05em #ffffff"
+          class="card-header text-center fs-5"
+        >
+          Formações mais ultilizadas
+        </div>
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let lineup of lineups" class="list-group-item">
+            {{ lineup.formation }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col container-lineup" *ngIf="winsTotal">
+      <div class="card mx-auto" style="width: 18rem">
+        <img
+          src="../../../assets/table-logo-image.jpg"
+          class="card-img-top"
+          alt="tatic logo"
+        />
+        <div
+          style="text-shadow: 0.1em 0.1em 0.05em #ffffff"
+          class="card-header text-center fs-5"
+        >
+          Tabela de Resultados
+        </div>
+        <ul class="list-group list-group-flush text-center">
+          <li class="list-group-item">
+            Total de Vitórias: <span>{{ winsTotal }}</span>
+          </li>
+          <li class="list-group-item">
+            Total de Empates: <span>{{ drawsTotal }}</span>
+          </li>
+          <li class="list-group-item">
+            Total de Derrotas: <span>{{ losesTotal }}</span>
+          </li>
+          <li class="list-group-item">
+            Total de jogos: <span>{{ playedTotal }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="goalsMinute" class="card container-goals">
+    <div
+      style="text-shadow: 0.1em 0.1em 0.05em #ffffff"
+      class="card-header text-center fs-5"
+    >
+      Gols marcados por tempo de jogo
+    </div>
+    <div class="card-body row row-cols-3 justify-content-center gap-4">
+      <div class="col" style="width: 18rem">
+        <h3>0-15:</h3>
+        <p>total: {{ goalsMinute["0-15"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['0-15']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['0-15']['percentage']"
+          >
+            {{ goalsMinute["0-15"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width: 18rem">
+        <h3>16-30:</h3>
+        <p>total: {{ goalsMinute["16-30"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['16-30']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['16-30']['percentage']"
+          >
+            {{ goalsMinute["16-30"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col" style="width: 18rem">
+        <h3>31-45:</h3>
+        <p>total: {{ goalsMinute["31-45"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['31-45']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['31-45']['percentage']"
+          >
+            {{ goalsMinute["31-45"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width: 18rem">
+        <h3>46-60:</h3>
+        <p>total: {{ goalsMinute["46-60"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['46-60']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['46-60']['percentage']"
+          >
+            {{ goalsMinute["46-60"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width: 18rem">
+        <h3>61-75:</h3>
+        <p>total: {{ goalsMinute["61-75"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['61-75']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['61-75']['percentage']"
+          >
+            {{ goalsMinute["61-75"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width: 18rem">
+        <h3>76-90:</h3>
+        <p>total: {{ goalsMinute["76-90"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['76-90']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['76-90']['percentage']"
+          >
+            {{ goalsMinute["76-90"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width: 18rem">
+        <h3>91-105:</h3>
+        <p>total: {{ goalsMinute["91-105"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['91-105']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['91-105']['percentage']"
+          >
+            {{ goalsMinute["91-105"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+      <div class="col" style="width: 18rem">
+        <h3>106-120:</h3>
+        <p>total: {{ goalsMinute["106-120"]["total"] }}</p>
+        <p>porcentagem:</p>
+        <div
+          class="progress"
+          role="progressbar"
+          aria-label="Example with label"
+          [style.width.%]="goalsMinute['106-120']['percentage']"
+        >
+          <div
+            class="progress-bar"
+            [style.width.%]="goalsMinute['106-120']['percentage']"
+          >
+            {{ goalsMinute["106-120"]["percentage"] }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="color: #c4c0c0; margin-top: 5px" class="text-center">
+    created by Eduardo Lima
+  </p>
+</ng-container>

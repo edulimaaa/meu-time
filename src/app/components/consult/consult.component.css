@@ -1,0 +1,219 @@
+.container-form {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Defina aqui a cor e a opacidade desejada */
+  backdrop-filter: blur(4px); /* Defina aqui o valor de desfoque desejado */
+  margin: 2em 14em;
+  padding: 2em 0;
+  border-radius: 5px;
+}
+
+.container-country,
+.container-season,
+.container-league,
+.container-teams {
+  display: flex;
+  height: 6.5em;
+  width: 32em;
+  margin: auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+label {
+  font-size: 22px;
+}
+
+#league-select {
+  width: 23.5em;
+}
+
+.container-flag {
+  width: 7em;
+}
+
+#flag-image {
+  width: 7em;
+  height: auto;
+}
+
+#league-img {
+  width: 5.5em;
+  height: auto;
+}
+
+#team-img {
+  width: 5.5em;
+  height: auto;
+}
+
+#season-text {
+  font-size: 3.5em;
+  margin-top: 12px;
+}
+
+.container-players {
+  width: 60em;
+}
+
+.card {
+  background-color: #85ffbd;
+  background-image: linear-gradient(45deg, #85ffbd 0%, #fffb7d 100%);
+  border: none;
+  -webkit-box-shadow: 0px 7px 18px -12px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 7px 18px -12px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 7px 18px -12px rgba(0, 0, 0, 0.75);
+}
+
+#player-photo {
+  width: 11em;
+  height: auto;
+  margin: auto;
+  margin-top: 1em;
+  border-radius: 50%;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 1.5em;
+}
+
+.card-description {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text-description {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.result-description {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+#text-list-player {
+  margin: 1em 0;
+}
+
+.container-goals {
+  width: 90%;
+  margin: auto;
+}
+
+.container-formation-table {
+  width: 40em;
+  margin: 3em auto;
+}
+
+.login-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Fundo semi-transparente para destacar a tela de login */
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Z-index alto para garantir que a tela de login fique por cima do conteúdo */
+}
+
+.login-box {
+  background-image: url(../../../assets/wallpaper-login.jpg);
+  backdrop-filter: blur(4px);
+  padding: 5em 10em;
+  border-radius: 10px;
+}
+
+#text-login,
+#help-login {
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.795);
+  width: 8em;
+  border-radius: 30px;
+  margin: auto;
+  margin-bottom: 2em;
+}
+
+#help-login {
+  margin-top: 4em;
+  width: auto;
+}
+
+.popup {
+  position: fixed;
+  padding: 1em;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11;
+}
+
+@media (max-width: 1192px) {
+  .container-form {
+    margin: 2em 9em;
+  }
+}
+
+@media (max-width: 939px) {
+  #league-select {
+    width: 20em;
+  }
+  .container-form {
+    margin: 2em 4em;
+  }
+}
+
+@media (max-width: 767px) {
+  .container-form {
+    margin: 2em 1em;
+  }
+
+  .container-country,
+  .container-season,
+  .container-league,
+  .container-teams {
+    flex-direction: column-reverse;
+    margin-top: 5em;
+    width: auto;
+    text-align: center;
+  }
+
+  .container-players {
+    width: 18em;
+  }
+
+  #player-row {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 18em;
+  }
+
+  .container-formation-table {
+    flex-direction: column;
+    width: 18.5em;
+    margin: 2em auto;
+    gap: 2em;
+  }
+  .container-lineup {
+    width: 18em;
+    margin-left: 5px;
+  }
+
+  .login-box {
+    padding: 5em 1em;
+  }
+}
